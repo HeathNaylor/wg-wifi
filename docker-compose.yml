@@ -1,0 +1,11 @@
+services:
+  wgwifi:
+    build: .
+    network_mode: host
+    privileged: true
+    cap_add: [NET_ADMIN, SYS_MODULE]
+    devices: [/dev/net/tun]
+    env_file: .env
+    volumes:
+      - ./configs:/etc/wg-wifi
+    restart: unless-stopped

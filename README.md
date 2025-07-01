@@ -1,0 +1,2 @@
+# WireGuard Wifi
+This project sets up a portable Wi-Fi access point (SSID) that corporate laptops, tablets, and phones can join. All traffic is tunneled through WireGuard to your home server, so—from the company’s perspective—your device always appears to be on your home network. It’s a simple way to enjoy true “work-from-anywhere” flexibility when corporate VPN policies only permit connections from your home internet connection.
