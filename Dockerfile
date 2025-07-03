@@ -8,6 +8,7 @@ RUN apt-get update && \
         iproute2 iptables curl procps zstd vim \
         wpasupplicant gettext-base  \
         init-system-helpers \
+        tcpdump iputils-ping traceroute \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh        /usr/local/bin/

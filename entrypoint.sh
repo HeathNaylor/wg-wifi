@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
+echo "nameserver 9.9.9.9" > /etc/resolv.conf
+
 CFG=/etc/wg-wifi
 WG_IFACE=wg0
-LAN_IFACE=${LAN_IFACE:-wlp2s0}
 SUBNET=${SUBNET:-192.168.77.0/24}
-AP_ADDR=${SUBNET%0/24}1
 
 # ---------- 0  Sanity checks ----------
 : "${WIFI_PSK:?Need WIFI_PSK in .env}"
@@ -30,13 +30,16 @@ chmod 600 /etc/wireguard/wg0.conf
 sysctl -w net.ipv4.ip_forward=1 >/dev/null
 modprobe wireguard 2>/dev/null || true
 modprobe iptable_nat 2>/dev/null || true
-ip addr add "$AP_ADDR/24" dev "$LAN_IFACE"
-ip link set "$LAN_IFACE" up
+AP_ADDR="${SUBNET2}1"
+if ! ip addr show "$LAN_IFACE" | grep -q "$AP_ADDR/24"; then
+  ip addr add "$AP_ADDR/24" dev "$LAN_IFACE"
+fi
 
 # ---------- 4  Start services ----------
 # ---------- start services ----------
 service hostapd restart
 service dnsmasq restart
+ip link show wg0 &>/dev/null && wg-quick down /etc/wireguard/wg0.conf || true
 wg-quick up /etc/wireguard/wg0.conf
 "$CFG/nat-rules.sh" "$LAN_IFACE" "$SUBNET"
 
